@@ -1,0 +1,62 @@
+class Solution {
+public:
+    vector<int> LIS_suffix(vector<int>&nums){
+        int n=nums.size();
+         vector<int>ans;
+         vector<int>output(n);
+        for(int i=n-1;i>=0;i--){
+            if(ans.size()==0||ans.back()<nums[i]){
+                ans.push_back(nums[i]);
+                output[i]=ans.size();
+                continue;
+            }
+            auto it=lower_bound(ans.begin(),ans.end(),nums[i])-ans.begin();
+            if(nums[i]==ans[it]){
+                output[i]=it+1;
+                continue;
+            }
+            output[i]=it+1;
+            ans[it]=nums[i];
+        }
+        return output;
+    }
+    vector<int> LIS_prefix(vector<int>&nums){
+        int n=nums.size();
+         vector<int>ans;
+         vector<int>output(n);
+        for(int i=0;i<n;i++){
+            if(ans.size()==0||ans.back()<nums[i]){
+                ans.push_back(nums[i]);
+                output[i]=ans.size();
+                continue;
+            }
+            auto it=lower_bound(ans.begin(),ans.end(),nums[i])-ans.begin();
+            if(nums[i]==ans[it]){
+                output[i]=it+1;
+                continue;
+            }
+            output[i]=it+1;
+            ans[it]=nums[i];
+        }
+        return output;
+    }
+    int minimumMountainRemovals(vector<int>& nums) {
+        int n=nums.size();
+        vector<int>prefix=LIS_prefix(nums);
+        vector<int>suffix=LIS_suffix(nums);
+        for(auto i:prefix){
+            cout<<i<<" ";
+        }
+        cout<<endl;
+        for(auto i:suffix){
+            cout<<i<<" ";
+        }
+        int mini=0;
+        for(int i=1;i<n-1;i++){
+            if(prefix[i]>1&&suffix[i]>1){
+            mini=max(mini,prefix[i]+suffix[i]-1);
+            }
+        }
+       return n-mini;
+    }
+};
