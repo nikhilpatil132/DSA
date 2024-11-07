@@ -1,0 +1,43 @@
+    string  longest_common_subsequences(string x, string y) {
+        // Code here
+   
+        int n=x.size();
+        int m=y.size();
+        vector<vector<int>>dp(n+1,vector<int>(m+1,-1));
+        //finding the length of Longest common subsequence
+        
+        //intialization part
+        for(int i=0;i<=m;i++)dp[0][i]=0;
+        for(int i=0;i<=n;i++)dp[i][0]=0;
+        //iterative part
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=m;j++){
+                if(x[i-1]==y[j-1]){
+                    dp[i][j]=1+dp[i-1][j-1];
+                }
+                else{
+                    dp[i][j]=max(dp[i][j-1],dp[i-1][j]);
+                }
+            }
+        }
+        //FINDING THE LONGEST COMMON SUBSEQUENCE STRING 
+        int i=n,j=m;
+        string ans="";
+        while(i>0&&j>0){
+            if(x[i-1]==y[j-1]){
+                ans=x[i-1]+ans;
+                i--;
+                j--;
+            }
+            else{
+                int a=dp[i-1][j];
+                int b=dp[i][j-1];
+                if(a>=b)i--;
+                else j--;
+            }
+        }
+        return ans;
+    }
+};
+
+
